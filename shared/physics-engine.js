@@ -64,6 +64,28 @@
     },
 
     /**
+     * Analytic interference field: value(x,y,t) = mean_k sin(k*dist - omega*t + phase).
+     * Sources at normalized [0,1] coords. Loops if omega*loopSeconds is a 2π multiple.
+     * @returns {Array<{x:number,y:number,value:number}>} grid coords in [0,1], value in [-1,1]
+     */
+    waveField({ sources, k, omega, cols, rows, time }) {
+      const out = [];
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          const gx = cols === 1 ? 0.5 : c / (cols - 1);
+          const gy = rows === 1 ? 0.5 : r / (rows - 1);
+          let v = 0;
+          for (const s of sources) {
+            const d = Math.hypot(gx - s.x, gy - s.y);
+            v += Math.sin(k * d - omega * time + (s.phase || 0));
+          }
+          out.push({ x: gx, y: gy, value: v / sources.length });
+        }
+      }
+      return out;
+    },
+
+    /**
      * General 4th-order Runge-Kutta step. Reserved for future non-analytic sims.
      *
      * @param {number[]} state          state vector at time t
