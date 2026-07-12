@@ -49,6 +49,21 @@
     },
 
     /**
+     * Analytic Lissajous / harmonograph point at curve-parameter s.
+     * Undamped so the curve is closed and loops; x,y in [-1,1].
+     * @param {object} opts
+     * @param {number} opts.fx  x-axis angular frequency
+     * @param {number} opts.fy  y-axis angular frequency
+     * @param {number} [opts.px] x-axis phase
+     * @param {number} [opts.py] y-axis phase
+     * @param {number} opts.s   curve parameter
+     * @returns {{x:number, y:number}}
+     */
+    harmonograph({ fx, fy, px = 0, py = 0, s }) {
+      return { x: Math.sin(fx * s + px), y: Math.sin(fy * s + py) };
+    },
+
+    /**
      * General 4th-order Runge-Kutta step. Reserved for future non-analytic sims.
      *
      * @param {number[]} state          state vector at time t
