@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>01 · Basic Pendulum Wave</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background: #0b0b0f;
+        overflow: hidden;
+      }
+      canvas {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <!--
+      LOAD ORDER MATTERS. Classic scripts execute top-to-bottom, sharing one global
+      namespace (p5 global mode). Dependencies must come before dependents:
+        1. p5.js (CDN)                          -> defines createCanvas, draw loop…
+        2. shared/*.js (this repo, ../../)      -> MathUtils, PhysicsEngine, P5Setup
+        3. sketch.js (LAST)                     -> defines setup()/draw(), uses the above
+      Because these are classic <script> tags (no `import`), this file runs by
+      double-clicking it (file://) — no local server required.
+    -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/p5@1.9.4/lib/p5.min.js"
+      integrity="sha384-6Twx1hAeKnwfOYJAHtYeJETRiGD5pRPkjjh0pVbG1QoesncjOpw5e75Y1kOkXeRI"
+      crossorigin="anonymous"
+    ></script>
+
+    <script src="../../shared/math-utils.js"></script>
+    <script src="../../shared/physics-engine.js"></script>
+    <script src="../../shared/p5-setup-template.js"></script>
+
+    <script src="sketch.js"></script>
+  </body>
+</html>
