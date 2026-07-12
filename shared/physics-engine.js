@@ -86,6 +86,29 @@
     },
 
     /**
+     * Double-pendulum equations of motion. state = [a1, a1v, a2, a2v]
+     * (angles from vertical, angular velocities). Returns ds/dt. Chaotic — MUST be
+     * integrated at a fixed dt (see pipeline G4), not per-output-frame dt.
+     * @returns {number[]} [a1v, a1a, a2v, a2a]
+     */
+    doublePendulumDerivative([a1, a1v, a2, a2v], { m1, m2, l1, l2, g }) {
+      const dd = a1 - a2;
+      const den = 2 * m1 + m2 - m2 * Math.cos(2 * a1 - 2 * a2);
+      const a1a =
+        (-g * (2 * m1 + m2) * Math.sin(a1) -
+          m2 * g * Math.sin(a1 - 2 * a2) -
+          2 * Math.sin(dd) * m2 * (a2v * a2v * l2 + a1v * a1v * l1 * Math.cos(dd))) /
+        (l1 * den);
+      const a2a =
+        (2 * Math.sin(dd) *
+          (a1v * a1v * l1 * (m1 + m2) +
+            g * (m1 + m2) * Math.cos(a1) +
+            a2v * a2v * l2 * m2 * Math.cos(dd))) /
+        (l2 * den);
+      return [a1v, a1a, a2v, a2a];
+    },
+
+    /**
      * General 4th-order Runge-Kutta step. Reserved for future non-analytic sims.
      *
      * @param {number[]} state          state vector at time t
